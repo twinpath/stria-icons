@@ -32,7 +32,3 @@ yarn-error.log*
 logs/
 tmp/
 dialog/
-
-# Custom reference directories (Decoupled source files)
-FontAwesome-6-PRO/
-sponsors.yml

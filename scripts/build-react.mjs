@@ -2,6 +2,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { build } from 'esbuild';
+import { exists, extractPathData, extractViewBox } from './utils/file-system.mjs';
+import { toPascalCase } from './utils/string.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -16,35 +18,6 @@ const CORE_DIST_DIR = path.join(ROOT_DIR, PATHS.coreDist);
 const REACT_DIR = path.join(ROOT_DIR, PATHS.reactPackage);
 const REACT_SRC_DIR = path.join(REACT_DIR, 'src');
 
-async function exists(filePath) {
-  try {
-    await fs.access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-// Convert kebab-case to PascalCase (e.g. chevron-right -> ChevronRight)
-function toPascalCase(str) {
-  return str
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('');
-}
-
-// Extract path data from SVG content
-function extractPathData(svgContent) {
-  const matches = [...svgContent.matchAll(/<path[^>]*d="([^"]+)"/g)];
-  return matches.map(m => m[1]);
-}
-
-// Extract viewBox from SVG content
-function extractViewBox(svgContent) {
-  const match = svgContent.match(/viewBox="([^"]+)"/);
-  return match ? match[1] : '0 0 24 24';
-}
-
 async function run() {
   console.log('Building React package wrappers...');
   
@@ -53,8 +26,8 @@ async function run() {
     console.error(`Core catalog icons.json not found in ${PATHS.coreDist}. Run build-core first.`);
     process.exit(1);
   }
-  
-  const catalog = JSON.parse(await fs.readFile(catalogPath, 'utf8'));
+  // Validate catalog is valid JSON
+  JSON.parse(await fs.readFile(catalogPath, 'utf8'));
   const STYLES = ['solid', 'regular', 'light', 'thin', 'duotone', 'brands'];
   
   await fs.mkdir(REACT_SRC_DIR, { recursive: true });
@@ -155,36 +128,44 @@ export type IconComponent = ForwardRefExoticComponent<IconProps & RefAttributes<
   await fs.writeFile(dtsFile, dtsCode, 'utf8');
 
   // Bundle with esbuild
-  console.log('Bundling React components with esbuild...');
+  console.log('Compiling React components (no-bundle)...');
   const distDir = path.join(REACT_DIR, 'dist');
   await fs.mkdir(path.join(distDir, 'esm'), { recursive: true });
   await fs.mkdir(path.join(distDir, 'cjs'), { recursive: true });
   await fs.mkdir(path.join(distDir, 'types'), { recursive: true });
 
+  const componentEntryPoints = barrelExports.map(exp => path.join(REACT_SRC_DIR, exp.importPath));
+  const entryPoints = [barrelFile, ...componentEntryPoints];
+
+  // Bundle dengan esbuild secara bertahap (batch) untuk menghindari deadlock di Windows
+  const BATCH_SIZE = 500;
+
+  async function buildInBatches(options) {
+    for (let i = 0; i < entryPoints.length; i += BATCH_SIZE) {
+      const batch = entryPoints.slice(i, i + BATCH_SIZE);
+      await build({
+        ...options,
+        entryPoints: batch,
+      });
+    }
+  }
+
   // ESM Build
-  await build({
-    entryPoints: [barrelFile],
-    bundle: true,
-    minify: true,
+  await buildInBatches({
+    bundle: false,
     format: 'esm',
-    outfile: path.join(distDir, 'esm/index.mjs'),
-    external: ['react'],
-    banner: {
-      js: "import * as React from 'react';",
-    },
+    outdir: path.join(distDir, 'esm'),
+    outbase: REACT_SRC_DIR,
+    jsx: 'automatic',
   });
 
   // CommonJS Build
-  await build({
-    entryPoints: [barrelFile],
-    bundle: true,
-    minify: true,
+  await buildInBatches({
+    bundle: false,
     format: 'cjs',
-    outfile: path.join(distDir, 'cjs/index.cjs'),
-    external: ['react'],
-    banner: {
-      js: "var React = require('react');",
-    },
+    outdir: path.join(distDir, 'cjs'),
+    outbase: REACT_SRC_DIR,
+    jsx: 'automatic',
   });
 
   // Copy type definitions to dist
@@ -199,6 +180,9 @@ export type IconComponent = ForwardRefExoticComponent<IconProps & RefAttributes<
       await fs.copyFile(srcPath, destPath);
     }
   }
+
+  await fs.rm(REACT_SRC_DIR, { recursive: true, force: true });
+  console.log('React src directory cleaned up successfully.');
   
   console.log(`React package wrappers generated and bundled successfully. Total components: ${barrelExports.length}`);
 }

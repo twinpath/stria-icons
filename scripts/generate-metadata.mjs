@@ -25,7 +25,7 @@ async function run() {
   const sourceCategoriesPath = path.join(SOURCE_METADATA_DIR, 'categories.json');
   
   if (!(await exists(sourceIconsPath)) || !(await exists(sourceCategoriesPath))) {
-    console.error('Source metadata files categories.json or icons.json are missing in FontAwesome-6-PRO/pro/metadata/.');
+    console.error('Source metadata files categories.json or icons.json are missing in metadata/.');
     process.exit(1);
   }
   
