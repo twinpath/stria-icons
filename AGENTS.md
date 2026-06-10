@@ -2,6 +2,11 @@
 
 This document provides system guidelines and instructions for AI agents working in the Stria Icons monorepo.
 
+## Documentation References
+
+- For detailed developer setup, directory structure, and contribution guides, read [DEVELOPMENT.md](DEVELOPMENT.md).
+- For release pipelines, automatic registry publishing, and tagging sequences, read [PUBLISHING.md](PUBLISHING.md).
+
 ## Architectural Constraints
 
 1. Core First: Raw SVG assets in `icons/{style}/*.svg` are the root source of truth.
@@ -16,3 +21,4 @@ This document provides system guidelines and instructions for AI agents working 
 - `pnpm build:core`: Rebuilds the core assets package only.
 - `pnpm build:react`: Rebuilds the React wrapper package only.
 - `pnpm build:blade`: Rebuilds the Blade wrapper package only.
+

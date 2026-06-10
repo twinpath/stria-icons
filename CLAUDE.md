@@ -2,6 +2,11 @@
 
 This file contains rules and instructions for Claude when editing, modifying, or reviewing the Stria Icons project.
 
+## Documentation References
+
+- For detailed developer setup, directory structure, and contribution guides, read [DEVELOPMENT.md](DEVELOPMENT.md).
+- For release pipelines, automatic registry publishing, and tagging sequences, read [PUBLISHING.md](PUBLISHING.md).
+
 <rules>
 - NEVER add emojis to any file, code, comments, documentation, logs, or commit messages.
 - Do not edit files in the `dist` directory or auto-generated resources manually. Always use the build scripts in `scripts/`.
@@ -15,3 +20,4 @@ Use the following commands during development:
 - `pnpm metadata`: Regenerate metadata index.
 - `pnpm build`: Run complete turborepo build.
 - `pnpm lint:icons`: Run SVG structure lint checks.
+
