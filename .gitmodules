@@ -1,0 +1,18 @@
+[submodule "packages/stria-icons-core"]
+	path = packages/stria-icons-core
+	url = https://github.com/twinpath/stria-icons-core
+[submodule "packages/stria-icons-react"]
+	path = packages/stria-icons-react
+	url = https://github.com/twinpath/stria-icons-react
+[submodule "packages/stria-icons-blade"]
+	path = packages/stria-icons-blade
+	url = https://github.com/twinpath/stria-icons-blade
+[submodule "templates/stria-icons-html-template"]
+	path = templates/stria-icons-html-template
+	url = https://github.com/twinpath/stria-icons-html-template
+[submodule "templates/stria-icons-react-template"]
+	path = templates/stria-icons-react-template
+	url = https://github.com/twinpath/stria-icons-react-template
+[submodule "templates/stria-icons-blade-template"]
+	path = templates/stria-icons-blade-template
+	url = https://github.com/twinpath/stria-icons-blade-template
