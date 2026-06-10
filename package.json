@@ -1,0 +1,26 @@
+{
+  "name": "stria-icons-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Monorepo for Stria Icons",
+  "scripts": {
+    "build": "turbo run build",
+    "build:webfonts": "node scripts/build-webfonts.mjs",
+    "build:core": "node scripts/build-core.mjs",
+    "build:react": "node scripts/build-react.mjs",
+    "build:blade": "node scripts/build-blade.mjs",
+    "build:wrappers": "node scripts/build-react.mjs && node scripts/build-blade.mjs",
+    "optimize": "node scripts/optimize-svg.mjs",
+    "metadata": "node scripts/generate-metadata.mjs",
+    "lint:icons": "node scripts/lint-icons.mjs",
+    "lint:code": "eslint ."
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "eslint": "^9.0.0",
+    "fantasticon": "^3.0.0",
+    "svgo": "^3.2.0",
+    "turbo": "^2.0.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
