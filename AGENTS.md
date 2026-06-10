@@ -12,6 +12,8 @@ This document provides system guidelines and instructions for AI agents working 
 1. Core First: Raw SVG assets in `icons/{style}/*.svg` are the root source of truth.
 2. Automate Wrapper Updates: Never edit React components or Laravel Blade view files manually. Edit the build scripts in `scripts/` instead and run the build command.
 3. No Emojis: Under no circumstances should emojis be added to any file in the project.
+4. No Build Commands: AI agents must never run build commands (e.g., `pnpm build`, `pnpm build:*`). The user will execute all build commands manually because the build process is time-consuming.
+
 
 ## Development Scripts
 
