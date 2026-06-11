@@ -1,0 +1,71 @@
+---
+title: Sizing & Scaling
+description: How to resize icons seamlessly without losing quality.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Stria Icons are designed on a `24x24` grid but are exported as pure SVGs and Webfonts. Because they are vector-based, they can scale infinitely to any dimension without pixilation.
+
+Since Stria Icons are **fill-based**, their "thickness" or "weight" will scale proportionally with their overall size. (If you want a thinner or bolder icon at the same size, you should switch the [Icon Style](/docs/usage/styles) instead).
+
+## Changing Icon Size
+
+<Tabs items={['Vanilla HTML', 'React', 'Laravel Blade']}>
+  <Tab value="Vanilla HTML">
+    **Using Webfonts (CSS Masking)**
+    When using the webfont or CSS Masking approach, icons scale exactly like text. You change their size using the `font-size` CSS property.
+
+    ```html
+    <!-- Small icon -->
+    <i class="stria-solid stria-home" style="font-size: 1rem;"></i>
+
+    <!-- Large icon using Tailwind text size utilities -->
+    <i class="stria-solid stria-home text-4xl"></i>
+    ```
+
+    **Using JS Replacer (Inline SVG)**
+    If you use the JS replacer, it outputs an inline `<svg>`. You can size it using standard `width` and `height` CSS properties, or Tailwind's `w-*` and `h-*` utilities.
+
+    ```html
+    <!-- The JS replacer will copy these classes to the generated SVG -->
+    <i data-stria="home" data-stria-style="solid" class="w-8 h-8"></i>
+    ```
+  </Tab>
+  <Tab value="React">
+    React components render an inline `<svg>`. You can resize them by passing standard HTML attributes (`width`, `height`) or by using CSS classes.
+
+    ```tsx
+    import { HomeSolid } from 'stria-icons-react';
+
+    export default function Sizes() {
+      return (
+        <div className="flex items-center gap-4">
+          {/* Using Tailwind CSS size utilities (Recommended) */}
+          <HomeSolid className="w-4 h-4" />
+          <HomeSolid className="w-6 h-6" />
+          <HomeSolid className="size-8" />
+          
+          {/* Using literal SVG attributes */}
+          <HomeSolid width={48} height={48} />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+  <Tab value="Laravel Blade">
+    Blade components render inline SVGs. The easiest way to scale them is by applying utility classes directly to the component.
+
+    ```html
+    <!-- Tailwind CSS width/height -->
+    <x-stria-home class="w-4 h-4" />
+    <x-stria-home class="w-8 h-8" />
+
+    <!-- Tailwind v3.4+ 'size' shortcut -->
+    <x-stria-home class="size-12" />
+
+    <!-- Standard attributes -->
+    <x-stria-home width="64" height="64" />
+    ```
+  </Tab>
+</Tabs>

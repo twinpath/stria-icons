@@ -1,0 +1,129 @@
+---
+title: Coloring & Duotone
+description: How to color icons, adapt to themes, and utilize the dual-layer Duotone style.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Because Stria Icons are rendered as native SVGs and Webfonts, they inherit the text color of their parent element by default (`currentColor`). 
+
+This means icons will automatically adapt to your application's light and dark mode themes without any extra configuration. However, you can explicitly color them when necessary.
+
+## Basic Coloring
+
+<Tabs items={['Vanilla HTML', 'React', 'Laravel Blade']}>
+  <Tab value="Vanilla HTML">
+    You can color icons by applying standard CSS `color` properties.
+
+    ```html
+    <!-- Inherits the parent's color -->
+    <div style="color: red;">
+      <i class="stria-solid stria-heart"></i>
+    </div>
+
+    <!-- Direct inline styling -->
+    <i class="stria-solid stria-check" style="color: #10b981;"></i>
+    ```
+
+    If you're using Tailwind CSS:
+    ```html
+    <i class="stria-solid stria-triangle-exclamation text-amber-500"></i>
+    ```
+  </Tab>
+  <Tab value="React">
+    In React, since the SVG uses `fill="currentColor"`, you can color the icon just like text.
+
+    ```tsx
+    import { HeartSolid, CheckSolid, WarningSolid } from 'stria-icons-react';
+
+    export default function Alerts() {
+      return (
+        <div className="flex gap-4">
+          {/* Using Tailwind CSS text color utilities */}
+          <HeartSolid className="text-red-500" />
+          
+          <CheckSolid className="text-emerald-500" />
+          
+          {/* Using inline styles */}
+          <WarningSolid style={{ color: '#f59e0b' }} />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+  <Tab value="Laravel Blade">
+    Pass CSS classes directly into the Blade component. Attributes are seamlessly forwarded to the underlying SVG.
+
+    ```html
+    <!-- Using Tailwind CSS -->
+    <x-stria-heart class="text-red-500" />
+
+    <x-stria-check class="text-emerald-500" />
+
+    <!-- Custom CSS classes -->
+    <x-stria-warning class="my-warning-icon" />
+    ```
+  </Tab>
+</Tabs>
+
+## The Duotone Style
+
+The **Duotone** style is unique because it consists of **two separate paths**: a primary layer and a secondary layer. 
+
+By default, both layers inherit the same `currentColor`, but the secondary layer has an automatic `40%` opacity applied to it (`.fa-secondary { opacity: .4 }` or `<path class="opacity-40" />`). This creates a sophisticated, translucent two-tone effect using just a single color code.
+
+If you want absolute control, you can define two completely different colors for the layers!
+
+<Tabs items={['Vanilla HTML', 'React', 'Laravel Blade']}>
+  <Tab value="Vanilla HTML">
+    In Vanilla HTML, the secondary and primary layers can be explicitly targeted using CSS variables or class overrides (if using the JS replacer).
+
+    When using CSS Masking, Duotone is incredibly powerful via CSS variables:
+    ```css
+    .my-custom-duotone {
+      --stria-primary-color: #1d4ed8;   /* Blue */
+      --stria-secondary-color: #93c5fd; /* Light Blue */
+      --stria-secondary-opacity: 1;     /* Remove the 40% default opacity */
+    }
+    ```
+
+    ```html
+    <i class="stria-duotone stria-layer-group my-custom-duotone"></i>
+    ```
+  </Tab>
+  <Tab value="React">
+    Because the React components are purely functional wrappers, you can target the SVG paths via standard CSS. 
+    By convention, the first path is the secondary layer, and the second path is the primary layer.
+
+    *Note: Advanced `primaryColor` and `secondaryColor` props are currently in development for the React package. For now, use CSS.*
+
+    ```css
+    /* global.css */
+    .icon-duotone-custom path:nth-child(1) {
+      fill: #ef4444; /* Red secondary */
+      opacity: 1;    /* Override default opacity */
+    }
+    .icon-duotone-custom path:nth-child(2) {
+      fill: #3b82f6; /* Blue primary */
+    }
+    ```
+
+    ```tsx
+    import { LayerGroupDuotone } from 'stria-icons-react';
+
+    <LayerGroupDuotone className="icon-duotone-custom w-8 h-8" />
+    ```
+  </Tab>
+  <Tab value="Laravel Blade">
+    Similar to React, apply a custom class to target the internal paths of the SVG rendered by Blade.
+
+    ```html
+    <style>
+      .blade-duotone path:nth-child(1) { fill: #f59e0b; opacity: 1; }
+      .blade-duotone path:nth-child(2) { fill: #10b981; }
+    </style>
+
+    <x-stria-duotone-layer-group class="blade-duotone w-8 h-8" />
+    ```
+  </Tab>
+</Tabs>

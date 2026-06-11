@@ -1,0 +1,95 @@
+---
+title: Installation
+description: How to install and use Stria Icons in your projects.
+---
+
+# Installation
+
+Stria Icons provides multiple packages tailored for different environments. Choose the package that best fits your tech stack.
+
+## React & Next.js
+
+For React applications, use our official `@stria-icons/react` package. It provides highly optimized, tree-shakeable SVG components.
+
+### 1. Install the package
+
+Using your preferred package manager, install `@stria-icons/react`:
+
+```bash
+npm install @stria-icons/react
+# or
+pnpm add @stria-icons/react
+# or
+yarn add @stria-icons/react
+```
+
+### 2. Usage
+
+Import the desired icon component and render it. You can customize the size, stroke width, and color via standard SVG props.
+
+```tsx
+import { AddressBookSolid, CameraRegular } from '@stria-icons/react';
+
+export default function MyComponent() {
+  return (
+    <div style={{ display: 'flex', gap: '16px', color: '#2563eb' }}>
+      <AddressBookSolid size={24} color="currentColor" />
+      <CameraRegular size={32} strokeWidth={2} />
+    </div>
+  );
+}
+```
+
+---
+
+## Vanilla HTML & CSS (Core Assets)
+
+If you are not using a JavaScript framework, or if you prefer to use SVG sprites, you can use `@stria-icons/core`.
+
+### 1. Install the package
+
+```bash
+npm install @stria-icons/core
+```
+
+### 2. Usage (SVG Sprites)
+
+The core package includes an SVG sprite sheet which is the most performant way to load icons in vanilla HTML.
+
+```html
+<svg class="stria-icon" width="24" height="24">
+  <use href="node_modules/@stria-icons/core/dist/sprite.svg#camera-regular"></use>
+</svg>
+```
+
+You can then style all your icons globally using CSS:
+
+```css
+.stria-icon {
+  fill: currentColor; /* For solid styles */
+  stroke: currentColor; /* For line-based styles */
+  stroke-width: 2px;
+}
+```
+
+---
+
+## Laravel Blade
+
+For Laravel projects, we offer `stria-icons/blade` which provides Blade directives and components.
+
+### 1. Install the package
+
+```bash
+composer require stria-icons/blade
+```
+
+### 2. Usage
+
+Use the component syntax directly in your Blade views:
+
+```html
+<x-stria-icon name="camera-regular" class="w-6 h-6 text-blue-500" stroke-width="2" />
+```
+
+For more detailed information, check the specific package directories in our [official packages](/packages) hub.

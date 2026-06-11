@@ -1,0 +1,97 @@
+---
+title: Accessibility (A11y)
+description: Best practices for making your icons accessible to screen readers.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Icons are powerful visual aids, but without proper context, they are invisible to visually impaired users relying on screen readers.
+
+When implementing Stria Icons, you must determine whether the icon is **Decorative** or **Semantic**.
+
+## 1. Decorative Icons
+
+Decorative icons are used purely for visual enhancement and don't add any new information to the page. For example, an icon placed next to a button text ("📥 Download").
+
+Decorative icons should be **hidden** from screen readers using `aria-hidden="true"`.
+
+<Tabs items={['Vanilla HTML', 'React', 'Laravel Blade']}>
+  <Tab value="Vanilla HTML">
+    Add the `aria-hidden` attribute directly to the `<i>` tag.
+
+    ```html
+    <button>
+      <i class="stria-solid stria-download" aria-hidden="true"></i>
+      Download PDF
+    </button>
+    ```
+  </Tab>
+  <Tab value="React">
+    React components accept all standard HTML/SVG attributes.
+
+    ```tsx
+    import { DownloadSolid } from 'stria-icons-react';
+
+    export default function DownloadButton() {
+      return (
+        <button className="flex items-center gap-2">
+          <DownloadSolid aria-hidden="true" />
+          Download PDF
+        </button>
+      );
+    }
+    ```
+  </Tab>
+  <Tab value="Laravel Blade">
+    Pass the attribute to the Blade component.
+
+    ```html
+    <button>
+      <x-stria-download aria-hidden="true" />
+      Download PDF
+    </button>
+    ```
+  </Tab>
+</Tabs>
+
+## 2. Semantic (Standalone) Icons
+
+Semantic icons convey meaning on their own, without accompanying text. For example, a "Trash" icon used as a delete button where there is no "Delete" text visible on the screen.
+
+These icons **must** have an accessible name provided via `aria-label` or visually hidden text, and they should be focusable if they act as interactive elements.
+
+<Tabs items={['Vanilla HTML', 'React', 'Laravel Blade']}>
+  <Tab value="Vanilla HTML">
+    Add an `aria-label` to the interactive element wrapper, and hide the icon.
+
+    ```html
+    <!-- Best Practice: Apply label to the button, hide the icon -->
+    <button aria-label="Delete item">
+      <i class="stria-solid stria-trash" aria-hidden="true"></i>
+    </button>
+    ```
+  </Tab>
+  <Tab value="React">
+    ```tsx
+    import { TrashSolid } from 'stria-icons-react';
+
+    export default function DeleteButton() {
+      return (
+        <button 
+          aria-label="Delete item"
+          className="p-2 hover:bg-gray-100 rounded-md"
+        >
+          <TrashSolid aria-hidden="true" />
+        </button>
+      );
+    }
+    ```
+  </Tab>
+  <Tab value="Laravel Blade">
+    ```html
+    <button aria-label="Delete item">
+      <x-stria-trash aria-hidden="true" />
+    </button>
+    ```
+  </Tab>
+</Tabs>
