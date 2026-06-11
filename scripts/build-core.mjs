@@ -9,6 +9,8 @@ import { generatePreprocessors } from './lib/scss-less-gen.mjs';
 import { generateJsBundles } from './lib/js-generator.mjs';
 import { generateShims } from './lib/shim-generator.mjs';
 import { generatePackageModules } from './lib/package-generator.mjs';
+import { generateWebfonts } from './lib/webfont-generator.mjs';
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -69,6 +71,12 @@ async function run() {
   // ------------------------------------------------------------------
   console.log('Processing SVGs and extracting metadata...');
   const iconDataByStyle = await processSvgs({ SRC_DIR, DIST_DIR, STYLES, catalog });
+
+  // ------------------------------------------------------------------
+  // Phase 1b: Webfonts generation from optimized SVGs
+  // ------------------------------------------------------------------
+  console.log('Generating webfonts...');
+  await generateWebfonts({ DIST_DIR });
 
   // ------------------------------------------------------------------
   // Phase 2: SVG Sprites (one per style)
