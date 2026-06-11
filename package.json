@@ -12,7 +12,10 @@
     "optimize": "node scripts/optimize-svg.mjs",
     "metadata": "node scripts/generate-metadata.mjs",
     "lint:icons": "node scripts/lint-icons.mjs",
-    "lint:code": "eslint ."
+    "lint:code": "eslint .",
+    "docs:dev": "pnpm --filter documentations dev",
+    "docs:build": "pnpm --filter documentations build",
+    "docs:deploy": "pnpm --filter documentations run deploy"
   },
   "devDependencies": {
     "esbuild": "^0.20.0",

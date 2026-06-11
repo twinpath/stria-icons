@@ -6,6 +6,7 @@ export default [
       "node_modules/**",
       "packages/**",
       "templates/**",
+      "documentations/**",
       "**/dist/**"
     ]
   },

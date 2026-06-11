@@ -1,2 +1,12 @@
 packages:
   - "packages/*"
+  - "documentations"
+allowBuilds:
+  es5-ext: true
+  esbuild: true
+  sharp: true
+  ttf2woff2: true
+  unrs-resolver: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - stria-icons@0.1.6
