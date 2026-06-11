@@ -12,6 +12,7 @@ This file contains rules and instructions for Claude when editing, modifying, or
 - Do not edit files in the `dist` directory or auto-generated resources manually. Always use the build scripts in `scripts/`.
 - Ensure all SVG source files maintain the `0 0 24 24` viewBox standard (except brand icons).
 - NEVER run build commands (e.g., `pnpm build`, `pnpm build:*`). The user must run these commands manually due to execution time.
+- Template packages (under `templates/`) do not follow core package versioning. Keep templates versioned statically at 1.0.0.
 </rules>
 
 ## Commands Reference

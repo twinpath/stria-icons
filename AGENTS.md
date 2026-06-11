@@ -13,6 +13,7 @@ This document provides system guidelines and instructions for AI agents working 
 2. Automate Wrapper Updates: Never edit React components or Laravel Blade view files manually. Edit the build scripts in `scripts/` instead and run the build command.
 3. No Emojis: Under no circumstances should emojis be added to any file in the project.
 4. No Build Commands: AI agents must never run build commands (e.g., `pnpm build`, `pnpm build:*`). The user will execute all build commands manually because the build process is time-consuming.
+5. Template Versioning: Starter templates located in `templates/` do not follow the core package versioning. Keep templates versioned statically at `1.0.0` and let them consume stable packages from public registries.
 
 
 ## Development Scripts

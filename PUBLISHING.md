@@ -6,9 +6,10 @@ This document describes the package distribution channels, synchronized versioni
 
 ## 1. Synchronized Versioning Model
 
-All Stria Icons packages and starter templates share the same version number to maintain parity. 
+All core Stria Icons packages (core, react, blade) share the same version number to maintain parity. 
 - Format: Semantic Versioning (SemVer) with format `v[Major].[Minor].[Patch]` (e.g. `v0.1.0`).
-- If you make changes to one package, you must increment the version across all manifests (`package.json` in core and react, `composer.json` in blade-icons) to ensure compatibility.
+- If you make changes to one core package, you must increment the version across all core manifests (`package.json` in core and react, `composer.json` in blade-icons) to ensure compatibility.
+- **Note on Templates:** Starter templates (under `templates/`) do not follow the package versioning. They are versioned statically at `1.0.0` and consume published registry packages.
 
 ---
 

@@ -49,7 +49,7 @@ stria-icons/
 │   ├── stria-icons-core/       # Core assets package (CSS, Webfonts, Sprites, Vanilla JS)
 │   ├── stria-icons-react/      # React wrapper components package
 │   └── stria-icons-blade/      # Laravel Blade components package
-├── templates/                  # Starter kit templates
+├── templates/                  # Starter kit templates (decoupled, versioned statically at 1.0.0)
 │   ├── stria-icons-html-template/   # Static HTML & CDN template
 │   ├── stria-icons-react-template/  # Vite + React template
 │   └── stria-icons-blade-template/  # Laravel Blade template
