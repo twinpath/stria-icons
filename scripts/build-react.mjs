@@ -95,7 +95,7 @@ export default ${componentName};
           componentName,
           style,
           pascalName,
-          importPath: `./icons/${style}/${pascalName}.jsx`
+          importPath: `./icons/${style}/${pascalName}.js`
         });
       }
     }
@@ -134,7 +134,7 @@ export type IconComponent = ForwardRefExoticComponent<IconProps & RefAttributes<
   await fs.mkdir(path.join(distDir, 'cjs'), { recursive: true });
   await fs.mkdir(path.join(distDir, 'types'), { recursive: true });
 
-  const componentEntryPoints = barrelExports.map(exp => path.join(REACT_SRC_DIR, exp.importPath));
+  const componentEntryPoints = barrelExports.map(exp => path.join(REACT_SRC_DIR, 'icons', exp.style, `${exp.pascalName}.jsx`));
   const entryPoints = [barrelFile, ...componentEntryPoints];
 
   // Bundle dengan esbuild secara bertahap (batch) untuk menghindari deadlock di Windows
