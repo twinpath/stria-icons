@@ -13,6 +13,7 @@ import {
   SiYarn,
   SiBun
 } from 'react-icons/si';
+import { VscIssues } from 'react-icons/vsc';
 
 export const customIcons: Record<string, ComponentType<any>> = {
   SiReact,
@@ -26,5 +27,6 @@ export const customIcons: Record<string, ComponentType<any>> = {
   SiTailwindcss,
   SiCss,
   SiYarn,
-  SiBun
+  SiBun,
+  VscIssues
 };

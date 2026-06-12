@@ -3,6 +3,7 @@ import './global.css';
 import { Inter, Geist } from 'next/font/google';
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { Footer } from "@/components/footer";
 
 import { Metadata } from 'next';
 import { appUrl } from "@/lib/shared";
@@ -42,7 +43,10 @@ export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={cn(inter.className, "font-sans", geist.variable)} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <div className="flex-1 flex flex-col">{children}</div>
+          <Footer />
+        </RootProvider>
         <Toaster />
       </body>
     </html>
