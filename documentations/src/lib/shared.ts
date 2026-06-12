@@ -8,6 +8,7 @@ export const gitConfig = {
   user: 'twinpath',
   repo: 'stria-icons',
   branch: 'main',
+  dir: 'documentations',
 };
 
 const rawUrl = process.env.NEXT_PUBLIC_APP_URL || 

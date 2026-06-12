@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Stria Icons',
     description: 'A meticulously crafted set of open-source SVG icons.',
-    url: 'https://stria-icons-docs.workers.dev',
+    url: 'https://stria-icons.dyzulk.com',
     siteName: 'Stria Icons',
     locale: 'en_US',
     type: 'website',
