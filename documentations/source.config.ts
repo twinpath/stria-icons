@@ -16,6 +16,19 @@ export const docs = defineDocs({
   },
 });
 
+export const resources = defineDocs({
+  dir: 'content/resources',
+  docs: {
+    schema: pageSchema,
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     // MDX options

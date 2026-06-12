@@ -1,5 +1,6 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { appName, gitConfig } from './shared';
+import { ResourcesMenu } from '@/components/nav/resources-menu';
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -19,8 +20,14 @@ export function baseOptions(): BaseLayoutProps {
         active: 'nested-url',
       },
       {
+        type: 'custom',
+        on: 'nav',
+        children: <ResourcesMenu />,
+      },
+      {
         text: 'Resources',
-        url: '/resources',
+        url: '/resources/license',
+        on: 'menu',
       },
       {
         text: 'Packages',

@@ -1,0 +1,46 @@
+---
+title: Contributing
+description: Learn how to contribute new icon designs and wrapper packages.
+---
+
+# Contributing Guide
+
+Thank you for your interest in contributing to Stria Icons! To maintain our strict standards of grid alignment and seamless framework rendering, please follow these guidelines when adding or modifying icons.
+
+## 1. Icon Design Specifications
+
+Before creating a new icon SVG, ensure your design conforms to the following rules:
+
+*   **ViewBox Grid**: All source SVGs must adhere to the `0 0 24 24` viewBox standard (e.g., `<svg viewBox="0 0 24 24" ...>`).
+*   **Stroked Paths**: Use uniform strokes instead of expanded paths where applicable. Avoid filled shapes unless designing for the Solid style.
+*   **Vector Cleanliness**: Keep path nodes to a minimum. Avoid unnecessary nested groupings (`<g>`) and inline styles. All colors should use `currentColor` so they adapt dynamically to the theme.
+*   **Style Consistency**: If you add a new icon, consider providing all active core styles: Solid, Regular, and Light. Put them in their respective source folders:
+    *   `icons/solid/{icon-name}.svg`
+    *   `icons/regular/{icon-name}.svg`
+    *   `icons/light/{icon-name}.svg`
+
+---
+
+## 2. Contribution Workflow
+
+To add or modify an icon in the codebase, follow this sequence:
+
+1.  **Place the Raw SVG**: Save your design in the appropriate style folder inside `icons/` (e.g., `icons/regular/new-icon.svg`).
+2.  **Run SVGO Optimization**: Run the SVGO pipeline to clean, minify, and strip metadata from the raw SVGs:
+    ```bash
+    pnpm optimize
+    ```
+    *Note: Never modify files inside the packages distribution folders directly.*
+3.  **Regenerate Metadata**: Rebuild the metadata catalog so that the index lists the new icon, categories, and styles:
+    ```bash
+    pnpm metadata
+    ```
+4.  **Submit a Pull Request**: Commit your raw SVG changes and the updated metadata catalog (`metadata/icons.json`), then open a Pull Request.
+
+---
+
+## 3. Contributing to Wrapper Packages
+
+If you want to suggest improvements to the React or Laravel Blade component wrappers:
+*   Do not edit components inside `packages/stria-icons-react/src/` or views inside `packages/stria-icons-blade/resources/svg/` manually. These folders are completely overwritten during the compile process.
+*   Instead, edit the build scripts and template compilers under the `scripts/` directory.

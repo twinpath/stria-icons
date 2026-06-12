@@ -12,6 +12,7 @@
 		"global_fetch_strictly_public"
 	],
 	"workers_dev": true,
+	"keep_names": false,
 	"preview_urls": true,
 	"routes": [
 		{
