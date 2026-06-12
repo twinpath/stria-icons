@@ -26,7 +26,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {...options}
           links={[]}
           sidebar={{
-            ...options.sidebar,
             banner: <HeaderLinks className="md:hidden flex-col items-start px-4 py-4 gap-4 border-b border-border/50" />
           }}
           nav={{
