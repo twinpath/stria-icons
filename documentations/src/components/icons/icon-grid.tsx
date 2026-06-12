@@ -94,7 +94,7 @@ export function IconGrid({
                       ? iconData.paths.map((d: string, i: number) => {
                           const isSecondary = style === 'duotone' && i === 0;
                           const pathFill = isSecondary ? secondaryColor : color;
-                          const pathClass = isSecondary && secondaryColor === 'currentColor' ? 'opacity-40' : '';
+                          const pathClass = isSecondary ? 'opacity-40' : '';
                           return (
                             <path 
                               key={i} 

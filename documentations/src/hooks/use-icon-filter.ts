@@ -16,11 +16,12 @@ export function useIconFilter() {
   useEffect(() => {
     if (resolvedTheme) {
       const defaultHex = resolvedTheme === 'dark' ? '#e2e8f0' : '#334155';
+      const defaultSecondaryHex = resolvedTheme === 'dark' ? '#60a5fa' : '#3b82f6';
       if (color === 'currentColor') {
         setColor(defaultHex);
       }
       if (secondaryColor === 'currentColor') {
-        setSecondaryColor(defaultHex);
+        setSecondaryColor(defaultSecondaryHex);
       }
     }
   }, [resolvedTheme]); // Only run when resolvedTheme changes
