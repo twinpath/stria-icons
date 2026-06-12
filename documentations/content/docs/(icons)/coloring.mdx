@@ -3,22 +3,30 @@ title: Coloring & Duotone
 description: How to color icons, adapt to themes, and utilize the dual-layer Duotone style in Vanilla HTML.
 ---
 
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-
 Because Stria Icons are rendered as native SVGs and Webfonts, they inherit the text color of their parent element by default (`currentColor`). 
 
 This means icons will automatically adapt to your application's light and dark mode themes without any extra configuration. However, you can explicitly color them when necessary.
 
 ## Basic Coloring
 
-<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
-  <Tab value="Tailwind CSS">
+<Tabs defaultValue="tailwind" groupId="styling-preference" persist>
+  <TabList>
+    <TabsTrigger value="tailwind" className="flex items-center gap-1.5">
+      <SiTailwindcss className="size-3.5 text-[#06B6D4]" />
+      Tailwind CSS
+    </TabsTrigger>
+    <TabsTrigger value="css" className="flex items-center gap-1.5">
+      <SiCss className="size-3.5 text-[#1572B6]" />
+      CSS Vanilla
+    </TabsTrigger>
+  </TabList>
+  <TabsContent value="tailwind">
     Coloring using Tailwind text color utility classes:
     ```html
     <i class="stria-solid stria-triangle-exclamation text-amber-500"></i>
     ```
-  </Tab>
-  <Tab value="CSS Vanilla">
+  </TabsContent>
+  <TabsContent value="css">
     Coloring using CSS `color` property:
     ```html
     <!-- Direct inline styling -->
@@ -29,7 +37,7 @@ This means icons will automatically adapt to your application's light and dark m
       <i class="stria-solid stria-heart"></i>
     </div>
     ```
-  </Tab>
+  </TabContent>
 </Tabs>
 
 ## The Duotone Style

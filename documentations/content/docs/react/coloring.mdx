@@ -3,8 +3,6 @@ title: Coloring & Duotone
 description: How to color React icon components, adapt to themes, and utilize the Duotone style.
 ---
 
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-
 Because Stria React components render native inline SVGs, they inherit the text color of their parent element by default (`currentColor`). 
 
 This means icons will automatically adapt to your application's light and dark mode themes. You can color them by setting text color on their wrapper or applying a custom className.
@@ -13,8 +11,18 @@ This means icons will automatically adapt to your application's light and dark m
 
 In React, since the SVG uses `fill="currentColor"`, you can color the icon just like text.
 
-<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
-  <Tab value="Tailwind CSS">
+<Tabs defaultValue="tailwind" groupId="styling-preference" persist>
+  <TabList>
+    <TabsTrigger value="tailwind" className="flex items-center gap-1.5">
+      <SiTailwindcss className="size-3.5 text-[#06B6D4]" />
+      Tailwind CSS
+    </TabsTrigger>
+    <TabsTrigger value="css" className="flex items-center gap-1.5">
+      <SiCss className="size-3.5 text-[#1572B6]" />
+      CSS Vanilla
+    </TabsTrigger>
+  </TabList>
+  <TabsContent value="tailwind">
     Coloring using Tailwind text color utility classes:
     ```tsx
     import { HeartSolid, CheckSolid } from '@stria-icons/react';
@@ -28,8 +36,8 @@ In React, since the SVG uses `fill="currentColor"`, you can color the icon just 
       );
     }
     ```
-  </Tab>
-  <Tab value="CSS Vanilla">
+  </TabContent>
+  <TabsContent value="css">
     Coloring using CSS `color` property or inline styles:
     ```tsx
     import { WarningSolid } from '@stria-icons/react';
@@ -46,7 +54,7 @@ In React, since the SVG uses `fill="currentColor"`, you can color the icon just 
       );
     }
     ```
-  </Tab>
+  </TabContent>
 </Tabs>
 
 ## The Duotone Style

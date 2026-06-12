@@ -3,23 +3,31 @@ title: Coloring & Duotone
 description: How to color Blade icon components, adapt to themes, and utilize the Duotone style.
 ---
 
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-
 Because Stria Blade components render native inline SVGs, they inherit the text color of their parent element by default (`currentColor`). 
 
 This means icons will automatically adapt to your application's light and dark mode themes. You can color them by setting text color on their parent wrapper or applying CSS classes directly to the component.
 
 ## Basic Coloring
 
-<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
-  <Tab value="Tailwind CSS">
+<Tabs defaultValue="tailwind" groupId="styling-preference" persist>
+  <TabList>
+    <TabsTrigger value="tailwind" className="flex items-center gap-1.5">
+      <SiTailwindcss className="size-3.5 text-[#06B6D4]" />
+      Tailwind CSS
+    </TabsTrigger>
+    <TabsTrigger value="css" className="flex items-center gap-1.5">
+      <SiCss className="size-3.5 text-[#1572B6]" />
+      CSS Vanilla
+    </TabsTrigger>
+  </TabList>
+  <TabsContent value="tailwind">
     Coloring using Tailwind text color utility classes:
     ```html
     <x-stria-heart class="text-red-500" />
     <x-stria-check class="text-emerald-500" />
     ```
-  </Tab>
-  <Tab value="CSS Vanilla">
+  </TabContent>
+  <TabsContent value="css">
     Coloring using CSS `color` property, inline style, or custom CSS classes:
     ```html
     <!-- Using custom CSS class -->
@@ -28,7 +36,7 @@ This means icons will automatically adapt to your application's light and dark m
     <!-- Using inline style -->
     <x-stria-warning style="color: #f59e0b;" />
     ```
-  </Tab>
+  </TabContent>
 </Tabs>
 
 ## The Duotone Style

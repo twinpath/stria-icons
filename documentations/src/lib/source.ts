@@ -2,28 +2,8 @@ import { docs, resources } from 'collections/server';
 import { loader, type LoaderPlugin } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
-import { createElement, type ComponentType } from 'react';
-import { 
-  SiReact, 
-  SiLaravel, 
-  SiPnpm, 
-  SiComposer, 
-  SiNpm, 
-  SiGithub, 
-  SiVuedotjs, 
-  SiJavascript 
-} from 'react-icons/si';
-
-const customIcons: Record<string, ComponentType<any>> = {
-  SiReact,
-  SiLaravel,
-  SiPnpm,
-  SiComposer,
-  SiNpm,
-  SiGithub,
-  SiVuedotjs,
-  SiJavascript
-};
+import { createElement } from 'react';
+import { customIcons } from './custom-icons';
 
 function customIconsPlugin(): LoaderPlugin {
   const replaceIcon = (node: any) => {
