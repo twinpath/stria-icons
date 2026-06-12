@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     template: '%s | Stria Icons',
     default: 'Stria Icons - Premium Open Source SVG Icons',
   },
+  icons: {
+    icon: '/stria-logo.svg',
+  },
   description: 'A meticulously crafted set of open-source SVG icons, available in Solid, Regular, Light, Thin, and Duotone styles.',
   openGraph: {
     title: 'Stria Icons',
