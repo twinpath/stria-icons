@@ -1,19 +1,59 @@
 import { docs, resources } from 'collections/server';
-import { loader } from 'fumadocs-core/source';
+import { loader, type LoaderPlugin } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { createElement, type ComponentType } from 'react';
+import { 
+  SiReact, 
+  SiLaravel, 
+  SiPnpm, 
+  SiComposer, 
+  SiNpm, 
+  SiGithub, 
+  SiVuedotjs, 
+  SiJavascript 
+} from 'react-icons/si';
+
+const customIcons: Record<string, ComponentType<any>> = {
+  SiReact,
+  SiLaravel,
+  SiPnpm,
+  SiComposer,
+  SiNpm,
+  SiGithub,
+  SiVuedotjs,
+  SiJavascript
+};
+
+function customIconsPlugin(): LoaderPlugin {
+  const replaceIcon = (node: any) => {
+    if (typeof node.icon === 'string' && node.icon in customIcons) {
+      node.icon = createElement(customIcons[node.icon]);
+    }
+    return node;
+  };
+
+  return {
+    name: 'custom-icons',
+    transformPageTree: {
+      file: replaceIcon,
+      folder: replaceIcon,
+      separator: replaceIcon,
+    },
+  };
+}
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
-  plugins: [lucideIconsPlugin()],
+  plugins: [customIconsPlugin(), lucideIconsPlugin()],
 });
 
 export const resourcesSource = loader({
   baseUrl: '/resources',
   source: resources.toFumadocsSource(),
-  plugins: [lucideIconsPlugin()],
+  plugins: [customIconsPlugin(), lucideIconsPlugin()],
 });
 
 export function getPageImage(page: (typeof source)['$inferPage']) {
