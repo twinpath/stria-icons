@@ -8,20 +8,13 @@ Fumadocs requires Node.js APIs for server-side MDX processing and search indexin
 
 The `@opennextjs/cloudflare` adapter wraps the Next.js server into a format compatible with Cloudflare Workers using the `nodejs_compat` compatibility flag. This allows the documentation to run on Cloudflare's global network without Edge Runtime restrictions.
 
-## Workspace Dependencies
+## CDN Integrations
 
-This is a pnpm monorepo. The `documentations` workspace depends on:
+The `documentations` workspace fetches SVGs and metadata directly from the jsdelivr CDN at build time and runtime. Therefore, it does NOT require the workspace packages to be built before deployment.
 
-- `stria-icons` (`packages/stria-icons-core/`) via `workspace:*`
-- `@stria-icons/react` (`packages/stria-icons-react/`) via `workspace:*`
-
-Both packages must be built before `opennextjs-cloudflare build` can succeed, because they must have a `dist/` directory for bundling.
-
-Correct build order from the repo root:
+Correct build command from the repo root:
 
 ```
-pnpm build:core    ->  packages/stria-icons-core/dist/
-pnpm build:react   ->  packages/stria-icons-react/dist/
 pnpm docs:cf:build ->  documentations/.open-next/
 ```
 
@@ -41,10 +34,10 @@ pnpm docs:cf:build ->  documentations/.open-next/
 | Project name | `stria-icons-docs` |
 | Production branch | `main` |
 | Root directory | *(leave empty — repo root)* |
-| Build command | `pnpm install && pnpm build:core && pnpm build:react && pnpm docs:cf:build` |
+| Build command | `pnpm install && pnpm docs:cf:build` |
 | Build output directory | `documentations/.open-next` |
 
-> Root directory is left empty so that `pnpm install` and all `pnpm build:*` scripts run from the monorepo root where `pnpm-workspace.yaml` is located. The build output path `documentations/.open-next` is relative to the repo root.
+> Root directory is left empty so that `pnpm install` runs from the monorepo root where `pnpm-workspace.yaml` is located. The build output path `documentations/.open-next` is relative to the repo root.
 
 ### 3. Add Environment Variable
 
@@ -66,7 +59,7 @@ To test the Worker locally before deploying:
 
 ```bash
 # From the repo root
-pnpm build:core && pnpm build:react && pnpm docs:cf:build
+pnpm docs:cf:build
 
 # Start local preview server at http://localhost:8787
 pnpm docs:cf:preview
@@ -74,9 +67,9 @@ pnpm docs:cf:preview
 
 ## Troubleshooting
 
-### "Cannot find module '@stria-icons/react'" during build
+### CDN Fetch Fails
 
-The workspace packages were not built before `opennextjs-cloudflare build`. Ensure `pnpm build:core && pnpm build:react` runs first in the build command.
+Ensure that the internet connection is active during the build and runtime, and the version specified in the CDN URLs (`0.1.6`) is published and available on npm.
 
 ### "Edge Runtime is not supported"
 

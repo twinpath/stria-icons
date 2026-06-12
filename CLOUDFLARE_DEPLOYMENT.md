@@ -7,7 +7,7 @@ description: How to deploy the Stria Icons documentation to Cloudflare Workers u
 
 The Stria Icons documentation site (`documentations/`) is built with Next.js and Fumadocs. It uses `@opennextjs/cloudflare` to compile the Next.js application into a Cloudflare Worker-compatible bundle.
 
-> This is a **pnpm monorepo**. The `documentations` workspace depends on `stria-icons` and `@stria-icons/react` via `workspace:*`. Workspace packages must be built before the documentation can be deployed.
+> The `documentations` workspace fetches SVGs and metadata directly from the jsdelivr CDN at build time and runtime. Therefore, it does NOT require the workspace packages to be built before deployment.
 
 ## Prerequisites
 
@@ -112,8 +112,8 @@ pnpm docs:dev
 To preview the Worker locally using the Cloudflare Workers runtime (Miniflare):
 
 ```bash
-# From repo root — builds workspace packages first, then OpenNext
-pnpm build:core && pnpm build:react && pnpm docs:cf:build
+# From repo root — builds OpenNext directly
+pnpm docs:cf:build
 
 # Then preview at http://localhost:8787
 pnpm docs:cf:preview
@@ -121,16 +121,12 @@ pnpm docs:cf:preview
 
 ## Build Order
 
-Because `documentations` uses `workspace:*` dependencies, the correct build order is:
+Since `documentations` does not use workspace dependencies for building icons, the build command is:
 
 ```
-1. pnpm build:core    ->  packages/stria-icons-core/dist/
-2. pnpm build:react   ->  packages/stria-icons-react/dist/
-3. pnpm docs:cf:build ->  documentations/.open-next/
-4. pnpm docs:cf:deploy
+1. pnpm docs:cf:build ->  documentations/.open-next/
+2. pnpm docs:cf:deploy
 ```
-
-Skipping steps 1 or 2 will cause `opennextjs-cloudflare build` to fail with a module resolution error.
 
 ## Deployment via GitHub Connection (Cloudflare Dashboard)
 
@@ -148,7 +144,7 @@ Deployment is handled by **Cloudflare Workers CI** — the native GitHub integra
 | Project name | `stria-icons-docs` |
 | Production branch | `main` |
 | Root directory | *(leave empty — repo root)* |
-| Build command | `pnpm install && pnpm build:core && pnpm build:react && pnpm docs:cf:build` |
+| Build command | `pnpm install && pnpm docs:cf:build` |
 | Build output directory | `documentations/.open-next` |
 
 5. Under **Settings > Variables**, add the production environment variable:

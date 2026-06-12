@@ -1,89 +1,20 @@
-'use client';
+import IconsPageClient from './icons-page-client';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { SidebarControls } from '@/components/icons/sidebar';
-import { SearchBar } from '@/components/icons/search-bar';
-import { IconGrid } from '@/components/icons/icon-grid';
-import { useIconFilter } from '@/hooks/use-icon-filter';
-import iconsMetadata from '../../../../../metadata/icons.json';
+export const revalidate = 86400; // Cache for 24 hours
 
-export default function IconsPage() {
-  const { 
-    style, setStyle, 
-    size, setSize, 
-    strokeWidth, setStrokeWidth, 
-    search, setSearch,
-    color, setColor,
-    secondaryColor, setSecondaryColor,
-    category, setCategory
-  } = useIconFilter();
-  
-  const [iconsModule, setIconsModule] = useState<any>(null);
-  const [visibleCount, setVisibleCount] = useState(100);
-
-  // Reset pagination when search, style or category changes
-  useEffect(() => {
-    setVisibleCount(100);
-  }, [search, style, category]);
-
-  // Load the core JS module dynamically from the API route whenever the style changes
-  useEffect(() => {
-    let isMounted = true;
-    setIconsModule(null); // Reset to trigger skeleton loader
-    import('@/lib/icons').then(({ loadIconsForStyle }) => {
-      loadIconsForStyle(style).then((mod) => {
-        if (isMounted) setIconsModule(mod);
-      });
+export default async function IconsPage() {
+  try {
+    const res = await fetch('https://cdn.jsdelivr.net/npm/stria-icons@0.1.6/dist/icons.json', {
+      next: { revalidate: 86400 },
     });
-    return () => { isMounted = false; };
-  }, [style]);
-
-  // Convert metadata object into array and filter by search & category
-  const filteredMetadata = useMemo(() => {
-    const arr = Object.values(iconsMetadata) as Array<{name: string, styles: string[], categories: string[]}>;
-    return arr.filter(meta => {
-      const matchStyle = meta.styles.includes(style);
-      const matchSearch = meta.name.toLowerCase().includes(search.toLowerCase());
-      const matchCategory = category === 'All' || (meta.categories && meta.categories.includes(category));
-      return matchStyle && matchSearch && matchCategory;
-    });
-  }, [style, search, category]);
-
-  return (
-    <div className="h-[calc(100vh-3.5rem)] flex flex-col lg:flex-row overflow-hidden container mx-auto py-8 px-4 gap-8">
-      {/* Sidebar - Fixed width, independent scroll */}
-      <SidebarControls 
-        style={style} setStyle={setStyle}
-        size={size} setSize={setSize}
-        strokeWidth={strokeWidth} setStrokeWidth={setStrokeWidth}
-        color={color} setColor={setColor}
-        secondaryColor={secondaryColor} setSecondaryColor={setSecondaryColor}
-        category={category} setCategory={setCategory}
-      />
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-0 h-full">
-        {/* Fixed Search Bar at the top of main content */}
-        <SearchBar 
-          search={search} 
-          setSearch={setSearch} 
-          count={filteredMetadata.length} 
-        />
-
-        {/* Icon Grid with its own scroll area */}
-        <IconGrid 
-          iconsModule={iconsModule}
-          filteredMetadata={filteredMetadata}
-          style={style}
-          size={size}
-          strokeWidth={strokeWidth}
-          color={color}
-          secondaryColor={secondaryColor}
-          search={search}
-          visibleCount={visibleCount}
-          setVisibleCount={setVisibleCount}
-        />
-      </div>
-    </div>
-  );
+    if (!res.ok) {
+      throw new Error(`Failed to fetch icons metadata: ${res.statusText}`);
+    }
+    const iconsMetadata = (await res.json()) as any;
+    return <IconsPageClient iconsMetadata={iconsMetadata} />;
+  } catch (error) {
+    console.error('Failed to load icons metadata on server:', error);
+    // Return empty object as fallback to prevent crash
+    return <IconsPageClient iconsMetadata={{}} />;
+  }
 }

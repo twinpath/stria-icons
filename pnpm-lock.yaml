@@ -29,9 +29,6 @@ importers:
       '@base-ui/react':
         specifier: ^1.5.0
         version: 1.5.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@stria-icons/react':
-        specifier: workspace:*
-        version: link:../packages/stria-icons-react
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -71,9 +68,6 @@ importers:
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      stria-icons:
-        specifier: workspace:*
-        version: link:../packages/stria-icons-core
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0

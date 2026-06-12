@@ -12,7 +12,6 @@ import {
   ComboboxItem,
 } from '@/components/ui/combobox';
 import { IconStyle } from '@/types/icon';
-import iconsMetadata from '../../../../metadata/icons.json';
 
 interface SidebarProps {
   style: IconStyle;
@@ -27,6 +26,7 @@ interface SidebarProps {
   setSecondaryColor: (val: string) => void;
   category: string;
   setCategory: (val: string) => void;
+  categories: string[];
 }
 
 export function SidebarControls({ 
@@ -35,17 +35,10 @@ export function SidebarControls({
   strokeWidth, setStrokeWidth,
   color, setColor,
   secondaryColor, setSecondaryColor,
-  category, setCategory
+  category, setCategory,
+  categories
 }: SidebarProps) {
   
-  // Extract all unique categories and sort alphabetically
-  const categories = useMemo(() => {
-    const allCategories = new Set<string>();
-    Object.values(iconsMetadata).forEach((meta: any) => {
-      meta.categories?.forEach((cat: string) => allCategories.add(cat));
-    });
-    return Array.from(allCategories).sort();
-  }, []);
 
   const SidebarContent = (
     <div className="flex flex-col gap-6 lg:gap-8 lg:pr-4 pb-4 lg:pb-12">
