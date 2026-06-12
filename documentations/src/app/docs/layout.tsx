@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Logo />
         </div>
         <div className="flex items-center">
-          <HeaderLinks />
+          <HeaderLinks className="hidden md:flex ml-4" />
         </div>
       </header>
 
@@ -24,7 +24,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <DocsLayout
           tree={source.getPageTree()}
           {...options}
-          links={options.links?.map(link => ({ ...link, on: 'menu' as const }))}
+          links={[]}
+          sidebar={{
+            ...options.sidebar,
+            banner: <HeaderLinks className="md:hidden flex-col items-start px-4 py-4 gap-4 border-b border-border/50" />
+          }}
           nav={{
             ...options.nav,
             title: <span className="md:hidden"><Logo /></span>,

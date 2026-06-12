@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 import { ResourcesMenu } from '@/components/nav/resources-menu';
 import { cn } from '@/lib/utils'; // asumsikan file utils.ts ada untuk classnames
 
-export function HeaderLinks() {
+export function HeaderLinks({ className }: { className?: string }) {
   const pathname = usePathname();
 
   return (
-    <div className="hidden md:flex items-center gap-4 text-sm font-medium text-fd-muted-foreground ml-4">
+    <div className={cn("flex items-center gap-4 text-sm font-medium text-fd-muted-foreground", className)}>
       <Link 
         href="/icons" 
         className={cn(
