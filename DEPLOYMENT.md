@@ -36,6 +36,7 @@ pnpm docs:cf:build ->  documentations/.open-next/
 | Root directory | *(leave empty — repo root)* |
 | Build command | `pnpm install && pnpm docs:cf:build` |
 | Build output directory | `documentations/.open-next` |
+| Deploy command | `npx wrangler deploy -c documentations/wrangler.jsonc` |
 
 > Root directory is left empty so that `pnpm install` runs from the monorepo root where `pnpm-workspace.yaml` is located. The build output path `documentations/.open-next` is relative to the repo root.
 

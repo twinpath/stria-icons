@@ -146,6 +146,7 @@ Deployment is handled by **Cloudflare Workers CI** — the native GitHub integra
 | Root directory | *(leave empty — repo root)* |
 | Build command | `pnpm install && pnpm docs:cf:build` |
 | Build output directory | `documentations/.open-next` |
+| Deploy command | `npx wrangler deploy -c documentations/wrangler.jsonc` |
 
 5. Under **Settings > Variables**, add the production environment variable:
 
