@@ -10,6 +10,10 @@ export const gitConfig = {
   branch: 'main',
 };
 
-export const appUrl = process.env.NEXT_PUBLIC_APP_URL || 
+const rawUrl = process.env.NEXT_PUBLIC_APP_URL || 
   (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://stria-icons.dyzulk.com');
+
+export const appUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://') 
+  ? rawUrl 
+  : `https://${rawUrl}`;
 
