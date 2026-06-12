@@ -1,0 +1,83 @@
+---
+title: Coloring & Duotone
+description: How to color React icon components, adapt to themes, and utilize the Duotone style.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Because Stria React components render native inline SVGs, they inherit the text color of their parent element by default (`currentColor`). 
+
+This means icons will automatically adapt to your application's light and dark mode themes. You can color them by setting text color on their wrapper or applying a custom className.
+
+## Basic Coloring
+
+In React, since the SVG uses `fill="currentColor"`, you can color the icon just like text.
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Coloring using Tailwind text color utility classes:
+    ```tsx
+    import { HeartSolid, CheckSolid } from '@stria-icons/react';
+
+    export default function Alerts() {
+      return (
+        <div className="flex gap-4">
+          <HeartSolid className="text-red-500" />
+          <CheckSolid className="text-emerald-500" />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Coloring using CSS `color` property or inline styles:
+    ```tsx
+    import { WarningSolid } from '@stria-icons/react';
+
+    export default function Alerts() {
+      return (
+        <div className="flex gap-4">
+          {/* Using inline style */}
+          <WarningSolid style={{ color: '#f59e0b' }} />
+
+          {/* Using custom CSS class */}
+          <WarningSolid className="my-custom-color-icon" />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## The Duotone Style
+
+The **Duotone** style is unique because it consists of **two separate paths**: a primary layer and a secondary layer.
+
+By default, both layers inherit the same `currentColor`, but the secondary layer has an automatic `40%` opacity applied to it. This creates a sophisticated, translucent two-tone effect using just a single color code.
+
+If you want absolute control, you can define two completely different colors for the layers by targeting the paths inside the SVG component using CSS selectors. By convention, the first path is the secondary layer, and the second path is the primary layer.
+
+### CSS Setup
+
+```css
+/* global.css or app.css */
+.icon-duotone-custom path:nth-child(1) {
+  fill: #ef4444; /* Red secondary */
+  opacity: 1;    /* Remove default 40% opacity */
+}
+.icon-duotone-custom path:nth-child(2) {
+  fill: #3b82f6; /* Blue primary */
+}
+```
+
+### Component Usage
+
+```tsx
+import { LayerGroupDuotone } from '@stria-icons/react';
+
+export default function CustomIcon() {
+  return (
+    <LayerGroupDuotone className="icon-duotone-custom w-8 h-8" />
+  );
+}
+```

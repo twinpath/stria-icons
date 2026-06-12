@@ -1,0 +1,48 @@
+---
+title: Sizing & Scaling
+description: How to resize icons seamlessly without losing quality in Vanilla HTML.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Stria Icons are designed on a `24x24` grid but are exported as pure SVGs and Webfonts. Because they are vector-based, they can scale infinitely to any dimension without pixilation.
+
+Since Stria Icons are **fill-based**, their "thickness" or "weight" will scale proportionally with their overall size.
+
+## Changing Icon Size
+
+### 1. Using Webfonts (CSS Masking)
+When using the webfont or CSS Masking approach, icons scale exactly like text.
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Resize using Tailwind text size utility classes:
+    ```html
+    <i class="stria-solid stria-home text-4xl"></i>
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Resize using CSS `font-size` property:
+    ```html
+    <i class="stria-solid stria-home" style="font-size: 1.5rem;"></i>
+    ```
+  </Tab>
+</Tabs>
+
+### 2. Using JS Replacer (Inline SVG)
+If you use the JS replacer, it outputs an inline `<svg>`.
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Resize using Tailwind width/height utility classes:
+    ```html
+    <i data-stria="home" data-stria-style="solid" class="w-8 h-8"></i>
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Resize using standard SVG attributes or inline styles:
+    ```html
+    <i data-stria="home" data-stria-style="solid" style="width: 32px; height: 32px;"></i>
+    ```
+  </Tab>
+</Tabs>

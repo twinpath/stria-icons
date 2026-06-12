@@ -1,0 +1,38 @@
+---
+title: Sizing & Scaling
+description: How to resize Laravel Blade icon components without losing quality.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Stria Blade components render as inline SVGs and can scale infinitely to any dimension without quality loss.
+
+Because Stria Icons are **fill-based**, their visual weight scales proportionally with their overall size.
+
+## Changing Icon Size
+
+You can resize components by passing CSS classes directly or by using standard HTML attributes (`width`, `height`).
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Resize using Tailwind width/height utility classes:
+    ```html
+    <!-- Tailwind CSS width/height -->
+    <x-stria-home class="w-4 h-4" />
+    <x-stria-home class="w-8 h-8" />
+
+    <!-- Tailwind v3.4+ 'size' shortcut -->
+    <x-stria-home class="size-12" />
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Resize using width/height attributes or inline styles:
+    ```html
+    <!-- Using inline SVG attributes -->
+    <x-stria-home width="64" height="64" />
+
+    <!-- Using inline style -->
+    <x-stria-home style="width: 32px; height: 32px;" />
+    ```
+  </Tab>
+</Tabs>

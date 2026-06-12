@@ -1,0 +1,54 @@
+---
+title: Sizing & Scaling
+description: How to resize React icon components without losing quality.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Stria React components render as inline SVGs and can scale infinitely to any dimension without quality loss.
+
+Because Stria Icons are **fill-based**, their visual weight scales proportionally with their overall size.
+
+## Changing Icon Size
+
+You can resize components by passing CSS classes (such as Tailwind classes) or by using standard React props (`size`, `width`, `height`).
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Resize using Tailwind width/height utility classes:
+    ```tsx
+    import { HomeSolid } from '@stria-icons/react';
+
+    export default function Sizes() {
+      return (
+        <div className="flex items-center gap-4">
+          <HomeSolid className="w-4 h-4" />
+          <HomeSolid className="w-6 h-6" />
+          <HomeSolid className="size-8" />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Resize using size / width / height props or inline styles:
+    ```tsx
+    import { HomeSolid } from '@stria-icons/react';
+
+    export default function Sizes() {
+      return (
+        <div className="flex items-center gap-4">
+          {/* Using size prop (sets both width & height) */}
+          <HomeSolid size={32} />
+          
+          {/* Using separate width and height attributes */}
+          <HomeSolid width={48} height={48} />
+
+          {/* Using inline style */}
+          <HomeSolid style={{ width: '24px', height: '24px' }} />
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>

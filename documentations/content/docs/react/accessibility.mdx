@@ -1,0 +1,48 @@
+---
+title: Accessibility (A11y)
+description: Best practices for making React icon components accessible to screen readers.
+---
+
+Icons are powerful visual aids, but without proper context, they are invisible to visually impaired users relying on screen readers.
+
+When implementing Stria React components, you must determine whether the icon is **Decorative** or **Semantic**.
+
+## 1. Decorative Icons
+
+Decorative icons are used purely for visual decoration and do not add any new info to the page. For example, an icon placed next to text inside a button ("📥 Download").
+
+Decorative icons should be hidden from screen readers using `aria-hidden="true"`. All Stria React components accept standard HTML and SVG attributes.
+
+```tsx
+import { DownloadSolid } from '@stria-icons/react';
+
+export default function DownloadButton() {
+  return (
+    <button className="flex items-center gap-2">
+      <DownloadSolid aria-hidden="true" />
+      Download PDF
+    </button>
+  );
+}
+```
+
+## 2. Semantic (Standalone) Icons
+
+Semantic icons convey meaning on their own, without accompanying text. For example, a "Trash" icon used as a delete button where there is no "Delete" text visible on the screen.
+
+These icons **must** have an accessible name provided via `aria-label` or visually hidden text, and they should be focusable if they act as interactive elements.
+
+```tsx
+import { TrashSolid } from '@stria-icons/react';
+
+export default function DeleteButton() {
+  return (
+    <button 
+      aria-label="Delete item"
+      className="p-2 hover:bg-gray-100 rounded-md"
+    >
+      <TrashSolid aria-hidden="true" />
+    </button>
+  );
+}
+```

@@ -1,0 +1,39 @@
+---
+title: Styles & Weights
+description: How to apply different icon styles (Solid, Regular, Thin, Light, Duotone) in Vanilla HTML.
+---
+
+Stria Icons provides 5 distinct visual styles for every icon: **Solid**, **Regular**, **Thin**, **Light**, and **Duotone**. 
+
+Unlike stroke-based icons, Stria Icons are meticulously crafted as **fill-based geometric shapes**. This guarantees pixel-perfect rendering across all devices without the distortion caused by CSS `stroke-width` scaling.
+
+To change the visual weight or style of an icon, you switch the style class or attribute rather than modifying CSS strokes.
+
+## Applying Styles
+
+### 1. Using CSS Masking (Webfont style)
+When using the Vanilla package via CSS Masking, styles are applied using the `stria-{style}` utility class alongside the icon name.
+
+```html
+<!-- Solid (Default) -->
+<i class="stria-solid stria-home"></i>
+
+<!-- Regular -->
+<i class="stria-regular stria-home"></i>
+
+<!-- Light -->
+<i class="stria-light stria-home"></i>
+
+<!-- Thin -->
+<i class="stria-thin stria-home"></i>
+
+<!-- Duotone -->
+<i class="stria-duotone stria-home"></i>
+```
+
+### 2. Using JS Replacer Utility
+If you are using the JS Replacer utility to inject inline SVGs instead of CSS masks, use the `data-stria-style` attribute:
+
+```html
+<i data-stria="home" data-stria-style="thin"></i>
+```

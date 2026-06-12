@@ -1,0 +1,44 @@
+---
+title: Styles & Weights
+description: How to use different icon styles (Solid, Regular, Thin, Light, Duotone) in React.
+---
+
+Stria Icons provides 5 distinct visual styles for every icon: **Solid**, **Regular**, **Thin**, **Light**, and **Duotone**.
+
+Unlike stroke-based icons, Stria Icons are designed as **fill-based geometric shapes**. This guarantees pixel-perfect rendering across all devices without the scaling issues associated with CSS `stroke-width`.
+
+In React, the style is integrated directly into the component name exported from the package. Simply import the desired style variation.
+
+## Applying Styles
+
+Import the component suffix matching the weight you need:
+
+- **Solid**: `{IconName}Solid` (e.g. `HomeSolid`)
+- **Regular**: `{IconName}Regular` (e.g. `HomeRegular`)
+- **Light**: `{IconName}Light` (e.g. `HomeLight`)
+- **Thin**: `{IconName}Thin` (e.g. `HomeThin`)
+- **Duotone**: `{IconName}Duotone` (e.g. `HomeDuotone`)
+
+### Example
+
+```tsx
+import { 
+  HomeSolid, 
+  HomeRegular, 
+  HomeLight, 
+  HomeThin, 
+  HomeDuotone 
+} from '@stria-icons/react';
+
+export default function App() {
+  return (
+    <div className="flex gap-4">
+      <HomeSolid className="w-6 h-6" />
+      <HomeRegular className="w-6 h-6" />
+      <HomeLight className="w-6 h-6" />
+      <HomeThin className="w-6 h-6" />
+      <HomeDuotone className="w-6 h-6" />
+    </div>
+  );
+}
+```

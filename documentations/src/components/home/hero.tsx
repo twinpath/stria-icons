@@ -14,7 +14,7 @@ export function Hero() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
           <Button asChild size="lg" className="rounded-full px-8">
-            <Link href="/docs/vanilla">
+            <Link href="/docs">
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

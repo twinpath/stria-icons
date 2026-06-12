@@ -1,0 +1,34 @@
+---
+title: Accessibility (A11y)
+description: Best practices for making Laravel Blade icon components accessible to screen readers.
+---
+
+Icons are powerful visual aids, but without proper context, they are invisible to visually impaired users relying on screen readers.
+
+When implementing Stria Laravel components, you must determine whether the icon is **Decorative** or **Semantic**.
+
+## 1. Decorative Icons
+
+Decorative icons are used purely for visual decoration and do not add any new info to the page. For example, an icon placed next to text inside a button ("📥 Download").
+
+Decorative icons should be hidden from screen readers using `aria-hidden="true"`. All attributes passed to Stria Blade components are forwarded directly to the rendered SVG.
+
+```html
+<button>
+  <x-stria-download aria-hidden="true" />
+  Download PDF
+</button>
+```
+
+## 2. Semantic (Standalone) Icons
+
+Semantic icons convey meaning on their own, without accompanying text. For example, a "Trash" icon used as a delete button where there is no "Delete" text visible on the screen.
+
+These icons **must** have an accessible name provided via `aria-label` or visually hidden text, and they should be focusable if they act as interactive elements.
+
+```html
+<!-- Best Practice: Apply label to the button, hide the icon -->
+<button aria-label="Delete item">
+  <x-stria-trash aria-hidden="true" />
+</button>
+```

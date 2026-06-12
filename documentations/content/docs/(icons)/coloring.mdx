@@ -1,0 +1,53 @@
+---
+title: Coloring & Duotone
+description: How to color icons, adapt to themes, and utilize the dual-layer Duotone style in Vanilla HTML.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Because Stria Icons are rendered as native SVGs and Webfonts, they inherit the text color of their parent element by default (`currentColor`). 
+
+This means icons will automatically adapt to your application's light and dark mode themes without any extra configuration. However, you can explicitly color them when necessary.
+
+## Basic Coloring
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Coloring using Tailwind text color utility classes:
+    ```html
+    <i class="stria-solid stria-triangle-exclamation text-amber-500"></i>
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Coloring using CSS `color` property:
+    ```html
+    <!-- Direct inline styling -->
+    <i class="stria-solid stria-check" style="color: #10b981;"></i>
+
+    <!-- Inherits from parent wrapper -->
+    <div style="color: red;">
+      <i class="stria-solid stria-heart"></i>
+    </div>
+    ```
+  </Tab>
+</Tabs>
+
+## The Duotone Style
+
+The **Duotone** style is unique because it consists of **two separate paths**: a primary layer and a secondary layer. 
+
+By default, both layers inherit the same `currentColor`, but the secondary layer has an automatic `40%` opacity applied to it. This creates a sophisticated, translucent two-tone effect using just a single color code.
+
+If you want absolute control, you can define two completely different colors for the layers using CSS variables:
+
+```css
+.my-custom-duotone {
+  --stria-primary-color: #1d4ed8;   /* Blue primary */
+  --stria-secondary-color: #93c5fd; /* Light Blue secondary */
+  --stria-secondary-opacity: 1;     /* Remove default 40% opacity */
+}
+```
+
+```html
+<i class="stria-duotone stria-layer-group my-custom-duotone"></i>
+```

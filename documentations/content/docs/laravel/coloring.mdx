@@ -1,0 +1,59 @@
+---
+title: Coloring & Duotone
+description: How to color Blade icon components, adapt to themes, and utilize the Duotone style.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Because Stria Blade components render native inline SVGs, they inherit the text color of their parent element by default (`currentColor`). 
+
+This means icons will automatically adapt to your application's light and dark mode themes. You can color them by setting text color on their parent wrapper or applying CSS classes directly to the component.
+
+## Basic Coloring
+
+<Tabs items={['Tailwind CSS', 'CSS Vanilla']} groupId="styling-preference" persist>
+  <Tab value="Tailwind CSS">
+    Coloring using Tailwind text color utility classes:
+    ```html
+    <x-stria-heart class="text-red-500" />
+    <x-stria-check class="text-emerald-500" />
+    ```
+  </Tab>
+  <Tab value="CSS Vanilla">
+    Coloring using CSS `color` property, inline style, or custom CSS classes:
+    ```html
+    <!-- Using custom CSS class -->
+    <x-stria-warning class="my-warning-icon" />
+
+    <!-- Using inline style -->
+    <x-stria-warning style="color: #f59e0b;" />
+    ```
+  </Tab>
+</Tabs>
+
+## The Duotone Style
+
+The **Duotone** style is unique because it consists of **two separate paths**: a primary layer and a secondary layer.
+
+By default, both layers inherit the same `currentColor`, but the secondary layer has an automatic `40%` opacity applied to it. This creates a sophisticated, translucent two-tone effect using just a single color code.
+
+If you want absolute control, you can define two completely different colors for the layers by applying a custom class and targeting the paths in your CSS. By convention, the first path is the secondary layer, and the second path is the primary layer.
+
+### CSS Setup
+
+```css
+/* app.css or other stylesheet */
+.blade-duotone path:nth-child(1) {
+  fill: #f59e0b; /* Amber secondary */
+  opacity: 1;    /* Remove default 40% opacity */
+}
+.blade-duotone path:nth-child(2) {
+  fill: #10b981; /* Emerald primary */
+}
+```
+
+### Component Usage
+
+```html
+<x-stria-duotone-layer-group class="blade-duotone w-8 h-8" />
+```

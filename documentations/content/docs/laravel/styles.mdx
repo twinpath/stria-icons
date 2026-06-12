@@ -1,0 +1,40 @@
+---
+title: Styles & Weights
+description: How to use different icon styles (Solid, Regular, Thin, Light, Duotone) in Laravel Blade.
+---
+
+Stria Icons provides 5 distinct visual styles for every icon: **Solid**, **Regular**, **Thin**, **Light**, and **Duotone**.
+
+Unlike stroke-based icons, Stria Icons are designed as **fill-based geometric shapes**. This guarantees pixel-perfect rendering across all devices without the scaling issues associated with CSS `stroke-width`.
+
+In Laravel Blade, you specify the style by appending the style variation name directly inside the component tag. If no style is specified, it defaults to **Solid**.
+
+## Applying Styles
+
+Render the Blade component using the matching prefix structure:
+
+- **Solid (Default)**: `<x-stria-{name} />` or `<x-stria-solid-{name} />`
+- **Regular**: `<x-stria-regular-{name} />`
+- **Light**: `<x-stria-light-{name} />`
+- **Thin**: `<x-stria-thin-{name} />`
+- **Duotone**: `<x-stria-duotone-{name} />`
+
+### Example
+
+```html
+<!-- Solid (Default) -->
+<x-stria-home />
+<x-stria-solid-home />
+
+<!-- Regular -->
+<x-stria-regular-home />
+
+<!-- Light -->
+<x-stria-light-home />
+
+<!-- Thin -->
+<x-stria-thin-home />
+
+<!-- Duotone -->
+<x-stria-duotone-home />
+```
