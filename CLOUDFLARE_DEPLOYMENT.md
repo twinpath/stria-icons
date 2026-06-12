@@ -5,105 +5,169 @@ description: How to deploy the Stria Icons documentation to Cloudflare Workers u
 
 # Deploying to Cloudflare Workers
 
-The Stria Icons documentation site is built using Next.js and Fumadocs. We use **OpenNext** via `@opennextjs/cloudflare` to seamlessly deploy the Next.js application to the Cloudflare Workers edge network. This provides ultra-fast global performance and edge rendering.
+The Stria Icons documentation site (`documentations/`) is built with Next.js and Fumadocs. It uses `@opennextjs/cloudflare` to compile the Next.js application into a Cloudflare Worker-compatible bundle.
+
+> This is a **pnpm monorepo**. The `documentations` workspace depends on `stria-icons` and `@stria-icons/react` via `workspace:*`. Workspace packages must be built before the documentation can be deployed.
 
 ## Prerequisites
 
-Before deploying, ensure you have the following installed:
 - Node.js (v18+)
-- `pnpm` (The package manager used in this monorepo)
+- pnpm (see `packageManager` field in root `package.json`)
 - A [Cloudflare](https://dash.cloudflare.com/) account
-- Wrangler CLI (installed automatically as a project dependency)
+- Wrangler CLI — installed automatically as a dev dependency, no global install needed
 
-## 1. Authentication
+## Required Configuration Files
 
-First, log in to your Cloudflare account via the Wrangler CLI:
+The following files must exist in the `documentations/` directory. If they are missing (e.g. after a failed `migrate` command on Windows), create them manually.
+
+### `documentations/wrangler.jsonc`
+
+```jsonc
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "stria-icons-docs",
+    "main": ".open-next/worker.js",
+    "compatibility_date": "2026-06-12",
+    "compatibility_flags": [
+        "nodejs_compat",
+        "global_fetch_strictly_public"
+    ],
+    "assets": {
+        "binding": "ASSETS",
+        "directory": ".open-next/assets"
+    },
+    "images": {
+        "binding": "IMAGES"
+    },
+    "services": [
+        {
+            "binding": "WORKER_SELF_REFERENCE",
+            "service": "stria-icons-docs"
+        }
+    ],
+    "observability": {
+        "enabled": true
+    },
+    "upload_source_maps": true
+}
+```
+
+The `"name"` and `"services[0].service"` fields must be identical. Both use `"stria-icons-docs"`.
+
+### `documentations/open-next.config.ts`
+
+```typescript
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+
+export default defineCloudflareConfig({});
+```
+
+### `documentations/next.config.mjs`
+
+Append two lines at the end of the existing file:
+
+```javascript
+// Enable calling `getCloudflareContext()` in `next dev`.
+// See https://opennext.js.org/cloudflare/bindings#local-access-to-bindings.
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev();
+```
+
+### `documentations/.dev.vars`
+
+```ini
+# Load .env.development* files when running `wrangler dev`
+NEXTJS_ENV=development
+```
+
+## Scripts
+
+### In `documentations/package.json`
+
+```json
+"cf:build":   "opennextjs-cloudflare build",
+"cf:preview": "opennextjs-cloudflare preview",
+"cf:deploy":  "opennextjs-cloudflare deploy",
+"cf:upload":  "opennextjs-cloudflare upload",
+"deploy":     "opennextjs-cloudflare deploy",
+"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
+```
+
+### In root `package.json`
+
+```json
+"docs:cf:build":   "pnpm --filter documentations run cf:build",
+"docs:cf:preview": "pnpm --filter documentations run cf:preview",
+"docs:cf:deploy":  "pnpm --filter documentations run cf:deploy"
+```
+
+## Local Development
+
+Run the standard Next.js dev server:
 
 ```bash
-npx wrangler login
+pnpm docs:dev
 ```
 
-This will open your browser and prompt you to authorize Wrangler.
-
-## 2. Configuration
-
-Ensure that your `wrangler.toml` file at the root of the `documentations` workspace is configured correctly. It should look something like this:
-
-```toml
-name = "stria-icons-docs"
-main = ".open-next/worker.js"
-compatibility_date = "2024-09-23"
-compatibility_flags = ["nodejs_compat"]
-
-# Use the 'assets' configuration to serve static files from the Next.js build
-assets = { directory = ".open-next/assets", binding = "ASSETS" }
-```
-
-## 3. Build the Project
-
-To deploy to Cloudflare, you first need to build the Next.js application using OpenNext. OpenNext will compile the Next.js app into a Cloudflare Worker compatible bundle.
-
-Run the build script from the `documentations` directory:
+To preview the Worker locally using the Cloudflare Workers runtime (Miniflare):
 
 ```bash
-pnpm run build
+# From repo root — builds workspace packages first, then OpenNext
+pnpm build:core && pnpm build:react && pnpm docs:cf:build
+
+# Then preview at http://localhost:8787
+pnpm docs:cf:preview
 ```
 
-This command executes `opennextjs-cloudflare`, which generates the `.open-next` output directory containing your Worker script and static assets.
+## Build Order
 
-## 4. Local Testing (Optional)
+Because `documentations` uses `workspace:*` dependencies, the correct build order is:
 
-Before deploying to production, it's highly recommended to test the built worker locally using Miniflare (Cloudflare's local simulator).
+```
+1. pnpm build:core    ->  packages/stria-icons-core/dist/
+2. pnpm build:react   ->  packages/stria-icons-react/dist/
+3. pnpm docs:cf:build ->  documentations/.open-next/
+4. pnpm docs:cf:deploy
+```
+
+Skipping steps 1 or 2 will cause `opennextjs-cloudflare build` to fail with a module resolution error.
+
+## Deployment via GitHub Connection (Cloudflare Dashboard)
+
+Deployment is handled by **Cloudflare Workers CI** — the native GitHub integration in the Cloudflare Dashboard. No GitHub Actions workflow file is required.
+
+### Setup
+
+1. Open [Cloudflare Dashboard](https://dash.cloudflare.com/) > **Workers & Pages**
+2. Click **Create** > **Import a repository**
+3. Connect your GitHub account and select the `stria-icons` repository
+4. Configure the build settings:
+
+| Setting | Value |
+|---|---|
+| Project name | `stria-icons-docs` |
+| Production branch | `main` |
+| Root directory | `documentations` |
+| Build command | `pnpm --filter stria-icons build && pnpm --filter @stria-icons/react build && pnpm --filter documentations run cf:build` |
+| Build output directory | `.open-next` |
+
+5. Under **Settings > Variables**, add the production environment variable:
+
+```
+NEXTJS_ENV=production
+```
+
+### Preview Deployments
+
+Cloudflare Workers CI automatically creates a preview deployment for every pull request and non-production branch push. No additional configuration is needed.
+
+## Generate TypeScript Types for Bindings
+
+After `wrangler.jsonc` is in place, run this once to generate `cloudflare-env.d.ts`:
 
 ```bash
-pnpm run preview
+# From documentations/
+pnpm cf-typegen
 ```
 
-This will spin up a local server (typically on `http://localhost:8787`). Verify that all pages, styles, and interactive components load correctly.
-
-## 5. Deployment
-
-Once you've verified the build locally, you can deploy the site to the Cloudflare global network.
-
-```bash
-pnpm run deploy
-```
-
-This command runs `wrangler deploy`, which uploads your Worker script and static assets to Cloudflare. 
-
-### Success!
-
-After a few seconds, Wrangler will output the production URL of your deployment (e.g., `https://stria-icons-docs.<your-subdomain>.workers.dev`). Your documentation is now live at the edge!
-
-## Continuous Integration (CI/CD)
-
-To automate deployments using GitHub Actions, you can use the official `cloudflare/wrangler-action`. Ensure you set the `CLOUDFLARE_API_TOKEN` secret in your repository settings.
-
-```yaml
-name: Deploy Docs
-
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'documentations/**'
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build docs
-        run: cd documentations && pnpm run build
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: documentations
-```
+The generated file provides type-safe access to Cloudflare bindings (`ASSETS`, `IMAGES`, `WORKER_SELF_REFERENCE`) in your Next.js code.

@@ -15,7 +15,10 @@
     "lint:code": "eslint .",
     "docs:dev": "pnpm --filter documentations dev",
     "docs:build": "pnpm --filter documentations build",
-    "docs:deploy": "pnpm --filter documentations run deploy"
+    "docs:deploy": "pnpm --filter documentations run deploy",
+    "docs:cf:build": "pnpm --filter documentations run cf:build",
+    "docs:cf:preview": "pnpm --filter documentations run cf:preview",
+    "docs:cf:deploy": "pnpm --filter documentations run cf:deploy"
   },
   "devDependencies": {
     "esbuild": "^0.20.0",
