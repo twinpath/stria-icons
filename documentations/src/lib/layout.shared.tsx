@@ -1,12 +1,13 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { appName, gitConfig } from './shared';
 import { ResourcesMenu } from '@/components/nav/resources-menu';
+import { Logo } from '@/components/Logo';
 
 export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
       // JSX supported
-      title: appName,
+      title: <Logo />,
     },
     links: [
       {

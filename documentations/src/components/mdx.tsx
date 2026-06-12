@@ -10,6 +10,7 @@ export function getMDXComponents(components?: MDXComponents) {
     PackageInstall,
     Tabs,
     TabsList,
+    TabList: TabsList,
     TabsTrigger,
     TabsContent,
     ...customIcons,
