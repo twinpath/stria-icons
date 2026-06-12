@@ -147,9 +147,9 @@ Deployment is handled by **Cloudflare Workers CI** — the native GitHub integra
 |---|---|
 | Project name | `stria-icons-docs` |
 | Production branch | `main` |
-| Root directory | `documentations` |
-| Build command | `pnpm --filter stria-icons build && pnpm --filter @stria-icons/react build && pnpm --filter documentations run cf:build` |
-| Build output directory | `.open-next` |
+| Root directory | *(leave empty — repo root)* |
+| Build command | `pnpm install && pnpm build:core && pnpm build:react && pnpm docs:cf:build` |
+| Build output directory | `documentations/.open-next` |
 
 5. Under **Settings > Variables**, add the production environment variable:
 

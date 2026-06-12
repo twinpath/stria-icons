@@ -1,45 +1,59 @@
 # documentations
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+The Stria Icons documentation site, built with [Next.js](https://nextjs.org) and [Fumadocs](https://fumadocs.dev). Deployed to Cloudflare Workers via the OpenNext adapter.
 
-Run development server:
+## Development
+
+Run the local Next.js development server from the **repo root**:
 
 ```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
+pnpm docs:dev
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-## Explore
+## Project Structure
 
-In the project, you can see:
+| Path | Description |
+|---|---|
+| `src/app/(home)` | Landing page and other top-level pages |
+| `src/app/docs` | Documentation layout and pages |
+| `src/app/api/search/route.ts` | Route handler for Fumadocs search |
+| `content/` | MDX documentation source files |
+| `source.config.ts` | Fumadocs MDX configuration and frontmatter schema |
+| `lib/source.ts` | Content source adapter using Fumadocs `loader()` |
+| `lib/layout.shared.tsx` | Shared layout options |
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+## Cloudflare Deployment
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+This workspace is deployed to Cloudflare Workers as `stria-icons-docs` using the `@opennextjs/cloudflare` adapter.
 
-### Fumadocs MDX
+Key configuration files:
 
-A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.
+| File | Purpose |
+|---|---|
+| `wrangler.jsonc` | Cloudflare Worker configuration (name, bindings, compatibility flags) |
+| `open-next.config.ts` | OpenNext adapter configuration |
+| `.dev.vars` | Local environment variables for `wrangler dev` / `cf:preview` |
+| `cloudflare-env.d.ts` | Auto-generated TypeScript types for Cloudflare bindings |
 
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
+For full deployment instructions, see [DEPLOYMENT.md](../DEPLOYMENT.md) at the repo root.
 
-## Learn More
+### Available Scripts
 
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
+| Script | Description |
+|---|---|
+| `pnpm dev` | Next.js local dev server |
+| `pnpm cf:build` | Build with OpenNext for Cloudflare Workers |
+| `pnpm cf:preview` | Preview built Worker locally at `localhost:8787` |
+| `pnpm cf:deploy` | Deploy Worker to Cloudflare |
+| `pnpm cf:upload` | Upload Worker without triggering live routing swap |
+| `pnpm cf-typegen` | Regenerate `cloudflare-env.d.ts` from `wrangler.jsonc` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+> Always run `pnpm build:core && pnpm build:react` from the repo root before `cf:build`, as this workspace depends on `stria-icons` and `@stria-icons/react` via `workspace:*`.
+
+## References
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Fumadocs Documentation](https://fumadocs.dev)
+- [OpenNext Cloudflare](https://opennext.js.org/cloudflare)

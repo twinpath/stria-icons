@@ -1,60 +1,87 @@
 # Deployment Guide: Cloudflare Workers
 
-This guide explains how to deploy the Fumadocs documentation site (`documentations/`) to Cloudflare Workers using Cloudflare's built-in Git Integration (Workers Builds) and the OpenNext adapter.
+This guide explains how to deploy the Fumadocs documentation site (`documentations/`) to Cloudflare Workers using Cloudflare's native GitHub integration (Workers Builds) and the OpenNext adapter.
 
-## Prerequisites
+## Why Cloudflare Workers (not Pages)?
 
-1. A Cloudflare account.
-2. The monorepo pushed to a GitHub or GitLab repository.
-3. The `.gitmodules` file correctly configured with public URLs (this is already set up in the monorepo).
+Fumadocs requires Node.js APIs for server-side MDX processing and search indexing. Standard Cloudflare Pages forces Next.js into the Edge Runtime, which Fumadocs does not support.
 
-## Why Cloudflare Workers?
+The `@opennextjs/cloudflare` adapter wraps the Next.js server into a format compatible with Cloudflare Workers using the `nodejs_compat` compatibility flag. This allows the documentation to run on Cloudflare's global network without Edge Runtime restrictions.
 
-Fumadocs requires Node.js APIs to perform server-side MDX processing and search indexing. Standard Cloudflare Pages forces Next.js into the Edge Runtime, which Fumadocs does not support. 
+## Workspace Dependencies
 
-To bypass this, we use the `@opennextjs/cloudflare` adapter. OpenNext wraps the Next.js Node.js server into a Cloudflare Worker compatible format using the `nodejs_compat` compatibility flag, allowing the documentation to run seamlessly on Cloudflare's global network.
+This is a pnpm monorepo. The `documentations` workspace depends on:
 
-## Deployment Steps
+- `stria-icons` (`packages/stria-icons-core/`) via `workspace:*`
+- `@stria-icons/react` (`packages/stria-icons-react/`) via `workspace:*`
 
-Follow these steps in your Cloudflare Dashboard to set up automatic CI/CD:
+Both packages must be built before `opennextjs-cloudflare build` can succeed, because they must have a `dist/` directory for bundling.
 
-### 1. Connect Git Repository
+Correct build order from the repo root:
+
+```
+pnpm build:core    ->  packages/stria-icons-core/dist/
+pnpm build:react   ->  packages/stria-icons-react/dist/
+pnpm docs:cf:build ->  documentations/.open-next/
+```
+
+## Cloudflare Dashboard Setup (Workers Builds via GitHub Connection)
+
+### 1. Connect Repository
+
 1. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com).
-2. Go to **Workers & Pages** -> **Create application**.
-3. Select the **Workers** tab and click **Connect to Git** (Workers Builds).
-4. Connect your GitHub/GitLab account and select the `stria-icons` repository.
+2. Go to **Workers & Pages** > **Create**.
+3. Select the **Workers** tab and click **Connect to Git**.
+4. Connect your GitHub account and select the `twinpath/stria-icons` repository.
 
-### 2. Configure the Build Settings
-When prompted for the build configuration, enter the following details:
+### 2. Configure Build Settings
 
-- **Production branch**: `main` (or your default branch).
-- **Framework preset**: `None`
-- **Build command**: `npm run docs:deploy`
-- **Build output directory**: `documentations/.open-next`
+| Setting | Value |
+|---|---|
+| Project name | `stria-icons-docs` |
+| Production branch | `main` |
+| Root directory | *(leave empty — repo root)* |
+| Build command | `pnpm install && pnpm build:core && pnpm build:react && pnpm docs:cf:build` |
+| Build output directory | `documentations/.open-next` |
 
-*(Note: The `docs:deploy` script in the root `package.json` will automatically filter down to the `documentations` folder and run the OpenNext build process).*
+> Root directory is left empty so that `pnpm install` and all `pnpm build:*` scripts run from the monorepo root where `pnpm-workspace.yaml` is located. The build output path `documentations/.open-next` is relative to the repo root.
 
-### 3. Add Compatibility Flags
-Since OpenNext requires Node.js APIs, you must enable the compatibility flag in the Cloudflare Dashboard before the worker can run correctly.
+### 3. Add Environment Variable
 
-1. Once the project is created (even if the first build fails), go to your Worker's settings.
-2. Navigate to **Settings** -> **Runtime**.
-3. Under **Compatibility flags**, add: `nodejs_compat`.
-4. Ensure the **Compatibility date** is set to a recent date (e.g., `2024-09-23` or newer).
+Under **Settings > Variables & Secrets**, add:
+
+```
+NEXTJS_ENV=production
+```
 
 ### 4. Deploy
-1. Trigger a new deployment from the Cloudflare Dashboard, or simply push a new commit to your `main` branch.
-2. Cloudflare's build system will automatically:
-   - Clone the repository.
-   - Recursively clone all submodules (e.g., `packages/stria-icons-react`), ensuring the `workspace:*` dependencies resolve correctly.
-   - Run `pnpm install`.
-   - Execute the OpenNext build.
-   - Deploy the generated Worker to the global edge network.
+
+Click **Save and Deploy**. Cloudflare will immediately trigger the first build from the latest commit on `main`.
+
+Preview deployments are created automatically for every pull request and non-main branch push.
+
+## Local Preview
+
+To test the Worker locally before deploying:
+
+```bash
+# From the repo root
+pnpm build:core && pnpm build:react && pnpm docs:cf:build
+
+# Start local preview server at http://localhost:8787
+pnpm docs:cf:preview
+```
 
 ## Troubleshooting
 
 ### "Cannot find module '@stria-icons/react'" during build
-This means the Git submodules were not cloned properly. Ensure that your `.gitmodules` file contains public URLs that Cloudflare's build runner can access without authentication. 
+
+The workspace packages were not built before `opennextjs-cloudflare build`. Ensure `pnpm build:core && pnpm build:react` runs first in the build command.
 
 ### "Edge Runtime is not supported"
-This error indicates the application was accidentally deployed as a standard Cloudflare Pages project rather than a Cloudflare Worker via OpenNext. Ensure you are using the **Workers -> Connect to Git** flow and that your build command executes `opennextjs-cloudflare`.
+
+The application was deployed as a Cloudflare Pages project rather than a Worker. Use the **Workers > Connect to Git** flow (not Pages), and ensure the build command executes `opennextjs-cloudflare build`.
+
+### Compatibility flags missing
+
+The `wrangler.jsonc` already declares `nodejs_compat` and `global_fetch_strictly_public`. These are applied automatically on deploy — no manual configuration in the Dashboard is needed.
