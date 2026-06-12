@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 
 import { Metadata } from 'next';
+import { appUrl } from "@/lib/shared";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -13,6 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(appUrl),
   title: {
     template: '%s | Stria Icons',
     default: 'Stria Icons - Premium Open Source SVG Icons',

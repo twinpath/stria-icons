@@ -9,3 +9,7 @@ export const gitConfig = {
   repo: 'stria-icons',
   branch: 'main',
 };
+
+export const appUrl = process.env.NEXT_PUBLIC_APP_URL || 
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://stria-icons.dyzulk.com');
+
