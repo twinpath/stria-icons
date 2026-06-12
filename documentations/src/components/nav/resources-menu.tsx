@@ -2,11 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import {
-  NavbarMenu,
-  NavbarMenuContent,
-  NavbarMenuTrigger,
-} from "fumadocs-ui/layouts/home/navbar";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "fumadocs-ui/components/ui/popover";
 import { Scale, Users, ShieldAlert, Award, Sparkles } from "lucide-react";
 
 interface MenuItem {
@@ -49,13 +50,16 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-export function ResourcesMenu() {
+export function ResourcesMenu({ isActive }: { isActive?: boolean }) {
   return (
-    <NavbarMenu>
-      <NavbarMenuTrigger className="text-sm font-medium hover:text-foreground transition-colors cursor-pointer">
+    <Popover>
+      <PopoverTrigger className={cn(
+        "text-sm font-medium hover:text-fd-foreground transition-colors cursor-pointer outline-none",
+        isActive && "text-fd-foreground"
+      )}>
         Resources
-      </NavbarMenuTrigger>
-      <NavbarMenuContent className="p-4 w-[500px] sm:w-[600px] border border-border/40 bg-popover rounded-xl shadow-lg ring-1 ring-foreground/5 duration-200">
+      </PopoverTrigger>
+      <PopoverContent align="center" className="p-4 w-[500px] sm:w-[600px] border border-border/40 bg-popover rounded-xl shadow-lg ring-1 ring-foreground/5 duration-200">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -80,7 +84,7 @@ export function ResourcesMenu() {
             );
           })}
         </div>
-      </NavbarMenuContent>
-    </NavbarMenu>
+      </PopoverContent>
+    </Popover>
   );
 }

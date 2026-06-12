@@ -1,17 +1,41 @@
+"use client";
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ResourcesMenu } from '@/components/nav/resources-menu';
+import { cn } from '@/lib/utils'; // asumsikan file utils.ts ada untuk classnames
 
 export function HeaderLinks() {
+  const pathname = usePathname();
+
   return (
     <div className="hidden md:flex items-center gap-4 text-sm font-medium text-fd-muted-foreground ml-4">
-      <Link href="/icons" className="hover:text-fd-foreground transition-colors">
+      <Link 
+        href="/icons" 
+        className={cn(
+          "hover:text-fd-foreground transition-colors",
+          pathname.startsWith('/icons') && "text-fd-foreground"
+        )}
+      >
         Icons
       </Link>
-      <Link href="/docs" className="hover:text-fd-foreground transition-colors">
+      <Link 
+        href="/docs" 
+        className={cn(
+          "hover:text-fd-foreground transition-colors",
+          pathname.startsWith('/docs') && "text-fd-foreground"
+        )}
+      >
         Docs
       </Link>
-      <ResourcesMenu />
-      <Link href="/packages" className="hover:text-fd-foreground transition-colors">
+      <ResourcesMenu isActive={pathname.startsWith('/resources')} />
+      <Link 
+        href="/packages" 
+        className={cn(
+          "hover:text-fd-foreground transition-colors",
+          pathname.startsWith('/packages') && "text-fd-foreground"
+        )}
+      >
         Packages
       </Link>
     </div>
